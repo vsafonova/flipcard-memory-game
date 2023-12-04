@@ -64,7 +64,7 @@ function createCards() {
     card.appendChild(back);
 
     card.addEventListener("click", function (e) {
-      card.classList.toggle("toggleCard");
+      toggleCard(card);
       compareCards(e);
     });
   }
@@ -79,30 +79,29 @@ function shuffleCards() {
 
 function compareCards(e) {
   let clickedCard = e.target;
-  clickedCard.classList.add("flipped");
+  selectCard(clickedCard);
 
-  let flippedCards = document.querySelectorAll(".flipped");
+  let selectedCards = document.querySelectorAll(".selected");
 
   //Logic
-  if (flippedCards.length === 2) {
-    if (
-      flippedCards[0].getAttribute("name") ===
-      flippedCards[1].getAttribute("name")
-    ) {
-      console.log("match");
-      winCondition();
-      flippedCards[0].style.pointerEvents = "none";
-      flippedCards[1].style.pointerEvents = "none";
-    } else {
-      console.log("wrong");
-      setTimeout(function () {
-        flippedCards[0].classList.remove("toggleCard");
-        flippedCards[1].classList.remove("toggleCard");
-      }, 1000);
-    }
-    flippedCards[0].classList.remove("flipped");
-    flippedCards[1].classList.remove("flipped");
+  if (selectedCards.length !== 2) {
+    return;
   }
+
+  if (equalCards(selectedCards[0], selectedCards[1])) {
+    console.log("match");
+    winCondition();
+    disablePointerEvents(selectedCards[0]);
+    disablePointerEvents(selectedCards[1]);
+  } else {
+    console.log("wrong");
+    setTimeout(function () {
+      toggleCard(selectedCards[0]);
+      toggleCard(selectedCards[1]);
+    }, 1000);
+  }
+  unselectCard(selectedCards[0]);
+  unselectCard(selectedCards[1]);
 }
 
 function winCondition() {
@@ -110,7 +109,7 @@ function winCondition() {
   if (correctGuesses >= neededGuesses) {
     console.log("You win");
   }
-  
+
   console.log(correctGuesses);
   console.log(neededGuesses);
 }
@@ -118,3 +117,23 @@ function winCondition() {
 shuffleCards();
 
 createCards();
+
+function disablePointerEvents(card) {
+  card.style.pointerEvents = "none";
+}
+
+function selectCard(card) {
+  card.classList.add("selected");
+}
+
+function unselectCard(card) {
+  card.classList.remove("selected");
+}
+
+function toggleCard(card) {
+  card.classList.toggle("toggleCard");
+}
+
+function equalCards(card1, card2) {
+  return card1.getAttribute("name") === card2.getAttribute("name");
+}
