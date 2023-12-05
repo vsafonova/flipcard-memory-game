@@ -1,7 +1,11 @@
 let gameContainerEl = document.querySelector("#gameContainer");
 let correctGuesses = 0;
-let timer = 3;
-let gameStart = true;
+let timer = 500;
+let gameActive = true;
+let gameWon = false;
+let nameArray = [];
+let timeArray = [];
+let timeIndex = 0;
 
 let cardsArray = [
   {
@@ -45,8 +49,10 @@ let cardsArray = [
     url: "water.jpg",
   },
 ];
+
 cardsArray = cardsArray.concat(cardsArray);
 let neededGuesses = cardsArray.length / 2;
+loadPlayerData();
 
 //Card generator Function
 function createCards() {
@@ -111,6 +117,8 @@ function winCondition() {
   correctGuesses += 1;
   if (correctGuesses >= neededGuesses) {
     console.log("You win");
+    gameActive = false;
+    storePlayerData();
   }
 
   console.log(correctGuesses);
@@ -138,19 +146,64 @@ function toggleCard(card) {
   card.classList.toggle("toggleCard");
 }
 
+function addToggleCard(card) {
+  card.classList.add("toggleCard");
+}
+
 function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
 }
 
 function gameTimer() {
-  if (gameStart === false) {
+  if (gameActive === false) {
     return;
   }
   timer -= 1;
+
   let timerEl = document.querySelector("#gameTimer");
-  timerEl.innerHTML = "Timer: " + timer;
+  timerEl.innerHTML = "Timer: " + timeConvert(timer);
   if (timer <= 0) {
-    console.log("Time is up");
-    gameStart = false;
+    endGame();
+  }
+}
+
+function endGame() {
+  gameActive = false;
+  let cardEl = document.querySelectorAll(".card");
+  for (let i = 0; i < cardEl.length; i++) {
+    addToggleCard(cardEl[i]);
+  }
+}
+
+function timeConvert(timer) {
+  let minutes = Math.floor(timer / 60);
+  let seconds = timer - minutes * 60;
+  return minutes + ":" + seconds;
+}
+
+function storePlayerData() {
+  timeArray[timeIndex] = timer;
+  nameArray[timeIndex] = prompt("Enter your name");
+  timeIndex += 1;
+  localStorage.setItem("playerTimes", JSON.stringify(timeArray));
+  localStorage.setItem("playerNames", JSON.stringify(nameArray));
+}
+
+function loadPlayerData() {
+  timeArray = JSON.parse(localStorage.getItem("playerTimes")) || [];
+  nameArray = JSON.parse(localStorage.getItem("playerNames")) || [];
+  timeIndex = timeArray.length;
+  console.log(timeArray);
+  console.log(nameArray);
+  createScoreBoard();
+}
+
+function createScoreBoard() {
+  let scoreBoardEl = document.querySelector("#scoreBoard");
+  for (let i = 0; i < timeIndex; i++) {
+    let userScoreEl = document.createElement("div");
+    userScoreEl.innerHTML =
+      "name: " + nameArray[i] + " time:" + timeConvert(timeArray[i]);
+    scoreBoardEl.append(userScoreEl);
   }
 }
