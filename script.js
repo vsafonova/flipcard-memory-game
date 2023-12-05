@@ -1,5 +1,8 @@
 let gameContainerEl = document.querySelector("#gameContainer");
 let correctGuesses = 0;
+let timer = 3;
+let gameStart = true;
+
 let cardsArray = [
   {
     name: "Darkness",
@@ -117,6 +120,7 @@ function winCondition() {
 shuffleCards();
 
 createCards();
+window.setInterval(gameTimer, 1000);
 
 function disablePointerEvents(card) {
   card.style.pointerEvents = "none";
@@ -136,4 +140,17 @@ function toggleCard(card) {
 
 function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
+}
+
+function gameTimer() {
+  if (gameStart === false) {
+    return;
+  }
+  timer -= 1;
+  let timerEl = document.querySelector("#gameTimer");
+  timerEl.innerHTML = "Timer: " + timer;
+  if (timer <= 0) {
+    console.log("Time is up");
+    gameStart = false;
+  }
 }
