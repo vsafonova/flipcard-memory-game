@@ -1,6 +1,6 @@
 let gameContainerEl = document.querySelector("#gameContainer");
 let correctGuesses = 0;
-let timer = 500;
+let timer = 120;
 let gameActive = true;
 let gameWon = false;
 let nameArray = [];
@@ -65,7 +65,7 @@ function createCards() {
     face.classList = "face";
     back.classList = "back";
     //Attach the info to the cards
-    face.src = "images/" + cardsArray[i].url;
+    face.src = cardsArray[i].url;
     card.setAttribute("name", cardsArray[i].name);
     //Attch the cards to the gameContainer
     gameContainerEl.appendChild(card);
