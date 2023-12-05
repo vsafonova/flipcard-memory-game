@@ -88,7 +88,7 @@ function compareCards(e) {
     return;
   }
 
-  if (equalCards(selectedCards[0], selectedCards[1])) {
+  if (checkEqualCards(selectedCards[0], selectedCards[1])) {
     console.log("match");
     winCondition();
     disablePointerEvents(selectedCards[0]);
@@ -134,6 +134,6 @@ function toggleCard(card) {
   card.classList.toggle("toggleCard");
 }
 
-function equalCards(card1, card2) {
+function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
 }
