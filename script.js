@@ -10,43 +10,43 @@ let timeIndex = 0;
 let cardsArray = [
   {
     name: "Darkness",
-    url: "darkness.jpg",
+    url: "api/images/darkness.jpg",
   },
   {
     name: "double",
-    url: "double.jpg",
+    url: "api/images/double.jpg",
   },
   {
     name: "fairy",
-    url: "fairy.jpg",
+    url: "api/images/fairy.jpg",
   },
   {
     name: "fighting",
-    url: "fighting.jpg",
+    url: "api/images/fighting.jpg",
   },
   {
     name: "fire",
-    url: "fire.jpg",
+    url: "api/images/fire.jpg",
   },
   {
     name: "grass",
-    url: "grass.jpg",
+    url: "api/images/grass.jpg",
   },
   {
     name: "lightning",
-    url: "lightning.jpg",
+    url: "api/images/lightning.jpg",
   },
   {
     name: "metal",
-    url: "metal.jpg",
+    url: "api/images/metal.jpg",
   },
   {
     name: "psychic",
-    url: "psychic.jpg",
+    url: "api/images/psychic.jpg",
   },
   {
     name: "water",
-    url: "water.jpg",
+    url: "api/images/water.jpg",
   },
 ];
 
