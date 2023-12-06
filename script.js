@@ -1,58 +1,17 @@
 let gameContainerEl = document.querySelector("#gameContainer");
 let correctGuesses = 0;
-let timer = 120;
+let timer = 1200;
 let gameActive = true;
 let gameWon = false;
 let nameArray = [];
 let timeArray = [];
 let timeIndex = 0;
+let cardsArray = [];
+let neededGuesses = 0;
+console.log(cardsArray);
 
-let cardsArray = [
-  {
-    name: "Darkness",
-    url: "api/images/darkness.jpg",
-  },
-  {
-    name: "double",
-    url: "api/images/double.jpg",
-  },
-  {
-    name: "fairy",
-    url: "api/images/fairy.jpg",
-  },
-  {
-    name: "fighting",
-    url: "api/images/fighting.jpg",
-  },
-  {
-    name: "fire",
-    url: "api/images/fire.jpg",
-  },
-  {
-    name: "grass",
-    url: "api/images/grass.jpg",
-  },
-  {
-    name: "lightning",
-    url: "api/images/lightning.jpg",
-  },
-  {
-    name: "metal",
-    url: "api/images/metal.jpg",
-  },
-  {
-    name: "psychic",
-    url: "api/images/psychic.jpg",
-  },
-  {
-    name: "water",
-    url: "api/images/water.jpg",
-  },
-];
-
-cardsArray = cardsArray.concat(cardsArray);
-let neededGuesses = cardsArray.length / 2;
 loadPlayerData();
+getData();
 
 //Card generator Function
 function createCards() {
@@ -80,6 +39,8 @@ function createCards() {
 }
 
 function shuffleCards() {
+  cardsArray = cardsArray.concat(cardsArray);
+  neededGuesses = cardsArray.length / 2;
   cardsArray.sort(() => Math.random() - 0.5);
   console.log(cardsArray);
 }
@@ -125,9 +86,6 @@ function winCondition() {
   console.log(neededGuesses);
 }
 
-shuffleCards();
-
-createCards();
 window.setInterval(gameTimer, 1000);
 
 function disablePointerEvents(card) {
@@ -205,5 +163,20 @@ function createScoreBoard() {
     userScoreEl.innerHTML =
       "name: " + nameArray[i] + " time:" + timeConvert(timeArray[i]);
     scoreBoardEl.append(userScoreEl);
+  }
+}
+
+async function getData() {
+  let apiUrl = "data.json";
+  try {
+    let response = await fetch(apiUrl);
+    let result = await response.json();
+    cardsArray = result;
+    shuffleCards();
+    createCards();
+    console.log(response);
+    console.log(result);
+  } catch {
+    console.log("API error");
   }
 }
