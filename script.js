@@ -1,17 +1,26 @@
 let gameContainerEl = document.querySelector("#gameContainer");
-let correctGuesses = 0;
-let timer = 1200;
-let gameActive = true;
-let gameWon = false;
-let nameArray = [];
-let timeArray = [];
-let timeIndex = 0;
-let cardsArray = [];
-let neededGuesses = 0;
-console.log(cardsArray);
+let startContainerEl = document.querySelector("#startContainer");
+let nameInputEl = document.querySelector("#nameInput");
+let startButtonEl = document.querySelector("#startButton");
+let formEl = document.querySelector("#form");
 
+let userName = "";
+
+let gameWon = false;
+let gameActive = false;
+
+let correctGuesses = 9;
+let neededGuesses = 0;
+
+const maxTime = 500;
+const endTimeout = 5000;
+let timer = maxTime;
+
+let cardsArray = [];
+
+let scoreData = [];
 loadPlayerData();
-getData();
+//loadPlayerData();
 
 //Card generator Function
 function createCards() {
@@ -40,13 +49,10 @@ function createCards() {
 
 function shuffleCards() {
   cardsArray = cardsArray.concat(cardsArray);
-  neededGuesses = cardsArray.length / 2;
   cardsArray.sort(() => Math.random() - 0.5);
-  console.log(cardsArray);
 }
 
 //Check cards
-
 function compareCards(e) {
   let clickedCard = e.target;
   selectCard(clickedCard);
@@ -57,33 +63,33 @@ function compareCards(e) {
   if (selectedCards.length !== 2) {
     return;
   }
-
   if (checkEqualCards(selectedCards[0], selectedCards[1])) {
-    console.log("match");
     winCondition();
     disablePointerEvents(selectedCards[0]);
     disablePointerEvents(selectedCards[1]);
   } else {
-    console.log("wrong");
     setTimeout(function () {
+      if (gameActive === false) {
+        return;
+      }
       toggleCard(selectedCards[0]);
       toggleCard(selectedCards[1]);
     }, 1000);
   }
   unselectCard(selectedCards[0]);
   unselectCard(selectedCards[1]);
+
+  console.log(correctGuesses);
+  console.log(neededGuesses);
 }
 
 function winCondition() {
   correctGuesses += 1;
   if (correctGuesses >= neededGuesses) {
-    console.log("You win");
     gameActive = false;
-    storePlayerData();
+    storePlayerData()
+    setTimeout(resetGame, endTimeout);
   }
-
-  console.log(correctGuesses);
-  console.log(neededGuesses);
 }
 
 window.setInterval(gameTimer, 1000);
@@ -131,6 +137,7 @@ function endGame() {
   for (let i = 0; i < cardEl.length; i++) {
     addToggleCard(cardEl[i]);
   }
+  setTimeout(resetGame, endTimeout);
 }
 
 function timeConvert(timer) {
@@ -140,29 +147,36 @@ function timeConvert(timer) {
 }
 
 function storePlayerData() {
-  timeArray[timeIndex] = timer;
-  nameArray[timeIndex] = prompt("Enter your name");
-  timeIndex += 1;
-  localStorage.setItem("playerTimes", JSON.stringify(timeArray));
-  localStorage.setItem("playerNames", JSON.stringify(nameArray));
+  scoreData.push({ time: timer, name: userName });
+  scoreData.sort((b, a) => b.time - a.time);
+  localStorage.setItem("scores", JSON.stringify(scoreData));
+  createScoreBoard()
+
+  console.log(scoreData);
 }
 
 function loadPlayerData() {
-  timeArray = JSON.parse(localStorage.getItem("playerTimes")) || [];
-  nameArray = JSON.parse(localStorage.getItem("playerNames")) || [];
-  timeIndex = timeArray.length;
-  console.log(timeArray);
-  console.log(nameArray);
-  createScoreBoard();
+  scoreData = JSON.parse(localStorage.getItem("scores")) || [];
+  console.log(scoreData);
+  createScoreBoard()
 }
 
 function createScoreBoard() {
+  clearScoreBoard();
   let scoreBoardEl = document.querySelector("#scoreBoard");
-  for (let i = 0; i < timeIndex; i++) {
+  for (let i = 0; i < scoreData.length; i++) {
     let userScoreEl = document.createElement("div");
+    userScoreEl.classList.add("score");
     userScoreEl.innerHTML =
-      "name: " + nameArray[i] + " time:" + timeConvert(timeArray[i]);
+      "Name: " + scoreData[i].name + " Time: " + timeConvert(scoreData[i].time);
     scoreBoardEl.append(userScoreEl);
+  }
+}
+
+function clearScoreBoard() {
+  let scores = document.querySelectorAll(".score");
+  for (let i = 0; i < scores.length; i++) {
+    scores[i].remove();
   }
 }
 
@@ -172,11 +186,35 @@ async function getData() {
     let response = await fetch(apiUrl);
     let result = await response.json();
     cardsArray = result;
-    shuffleCards();
-    createCards();
-    console.log(response);
-    console.log(result);
+    neededGuesses = cardsArray.length;
+    startGame();
   } catch {
     console.log("API error");
   }
 }
+
+function resetGame() {
+  let card = document.querySelectorAll(".card");
+  console.log(card);
+  for (let i = 0; i < card.length; i++) {
+    card[i].remove();
+  }
+  timer = maxTime;
+  startContainerEl.classList.remove("start-container-hidden");
+}
+
+function startGame() {
+  gameActive = true;
+  correctGuesses = 9;
+  shuffleCards();
+  createCards();
+}
+
+formEl.addEventListener("submit", function (e) {
+  e.preventDefault();
+  userName = nameInputEl.value;
+  getData();
+  startContainerEl.classList.add("start-container-hidden");
+});
+
+
