@@ -9,7 +9,7 @@ let userName = "";
 let gameWon = false;
 let gameActive = false;
 
-let correctGuesses = 9;
+let correctGuesses = 0;
 let neededGuesses = 0;
 
 const maxTime = 500;
@@ -20,7 +20,6 @@ let cardsArray = [];
 
 let scoreData = [];
 loadPlayerData();
-//loadPlayerData();
 
 //Card generator Function
 function createCards() {
@@ -76,11 +75,9 @@ function compareCards(e) {
       toggleCard(selectedCards[1]);
     }, 1000);
   }
+
   unselectCard(selectedCards[0]);
   unselectCard(selectedCards[1]);
-
-  console.log(correctGuesses);
-  console.log(neededGuesses);
 }
 
 function winCondition() {
@@ -151,8 +148,6 @@ function storePlayerData() {
   scoreData.sort((b, a) => b.time - a.time);
   localStorage.setItem("scores", JSON.stringify(scoreData));
   createScoreBoard()
-
-  console.log(scoreData);
 }
 
 function loadPlayerData() {
@@ -181,11 +176,12 @@ function clearScoreBoard() {
 }
 
 async function getData() {
-  let apiUrl = "data.json";
+  let apiUrl = "meme.json";
   try {
     let response = await fetch(apiUrl);
     let result = await response.json();
     cardsArray = result;
+    createDeck();
     neededGuesses = cardsArray.length;
     startGame();
   } catch {
@@ -205,9 +201,10 @@ function resetGame() {
 
 function startGame() {
   gameActive = true;
-  correctGuesses = 9;
+  correctGuesses = 0;
   shuffleCards();
   createCards();
+  console.log(cardsArray)
 }
 
 formEl.addEventListener("submit", function (e) {
@@ -218,3 +215,10 @@ formEl.addEventListener("submit", function (e) {
 });
 
 
+function createDeck(){
+  //Funtion would be call immediately after api fetch
+  cardsArray.sort(() => Math.random() - 0.5);
+  console.log(cardsArray)
+  cardsArray= cardsArray.slice(-10);
+  console.log(cardsArray)
+}
