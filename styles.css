@@ -63,6 +63,7 @@ body {
 }
 .game-timer {
   max-width: 29rem;
+  visibility: hidden;
 }
 
 .start-container {
@@ -83,4 +84,17 @@ body {
 .start-container-hidden {
   display: none;
   z-index: -1;
+}
+
+.end-screen {
+  position: absolute;
+  visibility: hidden;
+  font-size: 5rem;
+  left: 25%;
+  top: 20%;
+  z-index: 2;
+}
+
+.end-screen-shown {
+  visibility: visible;
 }
