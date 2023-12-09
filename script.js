@@ -4,6 +4,8 @@ let nameInputEl = document.querySelector("#nameInput");
 let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
 
+let endScreenEl = document.querySelector("#endScreen");
+
 let userName = "";
 
 let gameWon = false;
@@ -12,7 +14,7 @@ let gameActive = false;
 let correctGuesses = 0;
 let neededGuesses = 0;
 
-const maxTime = 500;
+const maxTime = 5;
 const endTimeout = 5000;
 let timer = maxTime;
 
@@ -84,7 +86,9 @@ function winCondition() {
   correctGuesses += 1;
   if (correctGuesses >= neededGuesses) {
     gameActive = false;
-    storePlayerData()
+    storePlayerData();
+    endScreenEl.innerHTML = "You Win!";
+    endScreenEl.classList.add("end-screen-shown");
     setTimeout(resetGame, endTimeout);
   }
 }
@@ -134,26 +138,35 @@ function endGame() {
   for (let i = 0; i < cardEl.length; i++) {
     addToggleCard(cardEl[i]);
   }
+  endScreenEl.innerHTML = "You Lose!";
+  endScreenEl.classList.add("end-screen-shown");
   setTimeout(resetGame, endTimeout);
 }
 
 function timeConvert(timer) {
   let minutes = Math.floor(timer / 60);
   let seconds = timer - minutes * 60;
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
   return minutes + ":" + seconds;
 }
 
 function storePlayerData() {
-  scoreData.push({ time: timer, name: userName });
+  let timeUsed = maxTime - timer;
+  const maxScoreEntries = 10;
+  scoreData.push({ time: timeUsed, name: userName });
   scoreData.sort((b, a) => b.time - a.time);
+  if (scoreData.length > maxScoreEntries) {
+    scoreData.length = maxScoreEntries;
+  }
   localStorage.setItem("scores", JSON.stringify(scoreData));
-  createScoreBoard()
+  createScoreBoard();
 }
 
 function loadPlayerData() {
   scoreData = JSON.parse(localStorage.getItem("scores")) || [];
-  console.log(scoreData);
-  createScoreBoard()
+  createScoreBoard();
 }
 
 function createScoreBoard() {
@@ -163,7 +176,12 @@ function createScoreBoard() {
     let userScoreEl = document.createElement("div");
     userScoreEl.classList.add("score");
     userScoreEl.innerHTML =
-      "Name: " + scoreData[i].name + " Time: " + timeConvert(scoreData[i].time);
+      i +
+      1 +
+      ". " +
+      scoreData[i].name +
+      " Time: " +
+      timeConvert(scoreData[i].time);
     scoreBoardEl.append(userScoreEl);
   }
 }
@@ -190,6 +208,10 @@ async function getData() {
 }
 
 function resetGame() {
+  endScreenEl.classList.remove("end-screen-shown");
+
+  let timerEl = document.querySelector("#gameTimer");
+  timerEl.style.visibility = "hidden";
   let card = document.querySelectorAll(".card");
   console.log(card);
   for (let i = 0; i < card.length; i++) {
@@ -201,10 +223,12 @@ function resetGame() {
 
 function startGame() {
   gameActive = true;
-  correctGuesses = 0;
+  correctGuesses = 9;
   shuffleCards();
   createCards();
-  console.log(cardsArray)
+  console.log(cardsArray);
+  let timerEl = document.querySelector("#gameTimer");
+  timerEl.style.visibility = "visible";
 }
 
 formEl.addEventListener("submit", function (e) {
@@ -214,11 +238,10 @@ formEl.addEventListener("submit", function (e) {
   startContainerEl.classList.add("start-container-hidden");
 });
 
-
-function createDeck(){
+function createDeck() {
   //Funtion would be call immediately after api fetch
   cardsArray.sort(() => Math.random() - 0.5);
-  console.log(cardsArray)
-  cardsArray= cardsArray.slice(-10);
-  console.log(cardsArray)
+  console.log(cardsArray);
+  cardsArray = cardsArray.slice(-10);
+  console.log(cardsArray);
 }
