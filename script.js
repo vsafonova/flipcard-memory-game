@@ -5,8 +5,6 @@ let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
 let endScreenEl = document.querySelector("#endScreen");
 
-let timerLow = new Audio("./sounds/TimeLow.mp3");
-
 let userName = "";
 
 let gameWon = false;
@@ -18,6 +16,7 @@ let neededGuesses = 0;
 const maxTime = 90;
 const endTimeout = 10000;
 let timer = maxTime;
+let timerLow = new Audio("./sounds/TimeLow.mp3");
 
 let cardsArray = [];
 
@@ -223,7 +222,6 @@ function resetGame() {
   let timerEl = document.querySelector("#gameTimer");
   timerEl.style.visibility = "hidden";
   let card = document.querySelectorAll(".card");
-  console.log(card);
   for (let i = 0; i < card.length; i++) {
     card[i].remove();
   }
@@ -236,7 +234,6 @@ function startGame() {
   correctGuesses = 0;
   shuffleCards();
   createCards();
-  console.log(cardsArray);
   let timerEl = document.querySelector("#gameTimer");
   timerEl.style.visibility = "visible";
 }
