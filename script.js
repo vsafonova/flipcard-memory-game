@@ -196,10 +196,10 @@ function createScoreBoard() {
   }
 }
 
-function formatUserScore(index, data) {
+function formatUserScore(index, userData) {
   const usersRank = index + 1;
-  const userName = data.name;
-  const userTime = timeConvert(data.time);
+  const userName = userData.name;
+  const userTime = timeConvert(userData.time);
   const userScore = `${usersRank}. ${userName} ${userTime}`;
   return userScore;
 }
