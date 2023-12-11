@@ -50,7 +50,7 @@ function createCards() {
 
 function shuffleCards() {
   cardsArray = cardsArray.concat(cardsArray);
-  cardsArray.sort(() => Math.random() - 0.5);
+  shuffleArray(cardsArray);
 }
 
 //Check cards
@@ -190,7 +190,7 @@ function createScoreBoard() {
     let userScoreEl = document.createElement("div");
     userScoreEl.classList.add("score");
     userScoreEl.innerHTML =
-      i + 1 + ". " + scoreData[i].name + " " + timeConvert(scoreData[i].time);
+      i + 1 + ". " + scoreData[i].name + " " + timeConvert(scoreData[i].time);  //Todo rewrite this line in more readable way
     scoreBoardEl.append(userScoreEl);
   }
 }
@@ -241,13 +241,14 @@ function startGame() {
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
   userName = nameInputEl.value;
-  getData();
-  startContainerEl.classList.add("start-container-hidden");
+  getData().then(() => {
+    startContainerEl.classList.add("start-container-hidden");
+  })
 });
 
 function createDeck() {
   //Funtion would be call immediately after api fetch
-  cardsArray.sort(() => Math.random() - 0.5);
+  shuffleArray(cardsArray);
   cardsArray = cardsArray.slice(-10);
 }
 
@@ -276,4 +277,8 @@ function playLoseSound() {
 function playSuccessSound() {
   let sound = new Audio("./sounds/Success.mp3");
   sound.play();
+}
+
+function shuffleArray(array) {
+  array.sort(() => Math.random() - 0.5);
 }
