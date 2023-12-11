@@ -3,7 +3,6 @@ let startContainerEl = document.querySelector("#startContainer");
 let nameInputEl = document.querySelector("#nameInput");
 let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
-
 let endScreenEl = document.querySelector("#endScreen");
 
 let userName = "";
@@ -14,7 +13,7 @@ let gameActive = false;
 let correctGuesses = 0;
 let neededGuesses = 0;
 
-const maxTime = 5;
+const maxTime = 90;
 const endTimeout = 5000;
 let timer = maxTime;
 
@@ -64,6 +63,7 @@ function compareCards(e) {
   if (selectedCards.length !== 2) {
     return;
   }
+
   if (checkEqualCards(selectedCards[0], selectedCards[1])) {
     winCondition();
     disablePointerEvents(selectedCards[0]);
@@ -179,8 +179,7 @@ function createScoreBoard() {
       i +
       1 +
       ". " +
-      scoreData[i].name +
-      " Time: " +
+      scoreData[i].name + " " +
       timeConvert(scoreData[i].time);
     scoreBoardEl.append(userScoreEl);
   }
@@ -194,7 +193,7 @@ function clearScoreBoard() {
 }
 
 async function getData() {
-  let apiUrl = "meme.json";
+  let apiUrl = "/api/meme.json";
   try {
     let response = await fetch(apiUrl);
     let result = await response.json();
@@ -223,7 +222,7 @@ function resetGame() {
 
 function startGame() {
   gameActive = true;
-  correctGuesses = 9;
+  correctGuesses = 0;
   shuffleCards();
   createCards();
   console.log(cardsArray);
@@ -241,7 +240,5 @@ formEl.addEventListener("submit", function (e) {
 function createDeck() {
   //Funtion would be call immediately after api fetch
   cardsArray.sort(() => Math.random() - 0.5);
-  console.log(cardsArray);
   cardsArray = cardsArray.slice(-10);
-  console.log(cardsArray);
 }
