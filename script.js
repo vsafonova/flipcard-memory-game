@@ -24,9 +24,9 @@ let scoreData = [];
 loadPlayerData();
 
 //Card generator Function
-function createCards() {
+function createCards(cards) {
   //Generate the HTML
-  for (let i = 0; i < cardsArray.length; i++) {
+  for (let i = 0; i < cards.length; i++) {
     let card = document.createElement("div");
     let face = document.createElement("img");
     let back = document.createElement("div");
@@ -34,8 +34,8 @@ function createCards() {
     face.classList = "face";
     back.classList = "back";
     //Attach the info to the cards
-    face.src = cardsArray[i].url;
-    card.setAttribute("name", cardsArray[i].name);
+    face.src = cards[i].url;
+    card.setAttribute("name", cards[i].name);
     //Attch the cards to the gameContainer
     gameContainerEl.appendChild(card);
     card.appendChild(face);
@@ -48,9 +48,10 @@ function createCards() {
   }
 }
 
-function shuffleCards() {
-  cardsArray = cardsArray.concat(cardsArray);
-  shuffleArray(cardsArray);
+function shuffleCards(cards) {
+  cards = cards.concat(cards);
+  shuffleArray(cards);
+  return cards;
 }
 
 //Check cards
@@ -208,7 +209,7 @@ async function getData() {
     let response = await fetch(apiUrl);
     let result = await response.json();
     cardsArray = result;
-    createDeck();
+    cardsArray = createDeck(cardsArray);
     neededGuesses = cardsArray.length;
     startGame();
   } catch {
@@ -232,10 +233,9 @@ function resetGame() {
 function startGame() {
   gameActive = true;
   correctGuesses = 0;
-  shuffleCards();
-  createCards();
-  let timerEl = document.querySelector("#gameTimer");
-  timerEl.style.visibility = "visible";
+  let shuffledCards = shuffleCards(cardsArray);
+  createCards(shuffledCards);
+  showTimer();
 }
 
 formEl.addEventListener("submit", function (e) {
@@ -246,10 +246,16 @@ formEl.addEventListener("submit", function (e) {
   })
 });
 
-function createDeck() {
+function showTimer() {
+  let timerEl = document.querySelector("#gameTimer");
+  timerEl.style.visibility = "visible";
+}
+
+function createDeck(cards) {
   //Funtion would be call immediately after api fetch
-  shuffleArray(cardsArray);
-  cardsArray = cardsArray.slice(-10);
+  shuffleArray(cards);
+  cards = cards.slice(-10);
+  return cards
 }
 
 // Sounds effects
