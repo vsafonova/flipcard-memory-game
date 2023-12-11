@@ -190,10 +190,18 @@ function createScoreBoard() {
   for (let i = 0; i < scoreData.length; i++) {
     let userScoreEl = document.createElement("div");
     userScoreEl.classList.add("score");
-    userScoreEl.innerHTML =
-      i + 1 + ". " + scoreData[i].name + " " + timeConvert(scoreData[i].time);  //Todo rewrite this line in more readable way
+    const userScore = formatUserScore(i, scoreData[i]);
+    userScoreEl.innerHTML = userScore;
     scoreBoardEl.append(userScoreEl);
   }
+}
+
+function formatUserScore(index, data) {
+  const usersRank = index + 1;
+  const userName = data.name;
+  const userTime = timeConvert(data.time);
+  const userScore = `${usersRank}. ${userName} ${userTime}`;
+  return userScore;
 }
 
 function clearScoreBoard() {
