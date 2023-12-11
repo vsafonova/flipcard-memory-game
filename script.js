@@ -179,8 +179,7 @@ function createScoreBoard() {
       i +
       1 +
       ". " +
-      scoreData[i].name +
-      " time: " +
+      scoreData[i].name + " " +
       timeConvert(scoreData[i].time);
     scoreBoardEl.append(userScoreEl);
   }

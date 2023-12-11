@@ -14,7 +14,8 @@
 body {
   height: 100vh;
   font-family: 'Kavoon';
-  background: linear-gradient(270deg, rgba(228,235,235,1) 0%, rgba(77,76,74,1) 100%);
+  /* background: linear-gradient(270deg, rgba(228,235,235,1) 0%, rgba(77,76,74,1) 100%); */
+  background-color: rgb(214,208,179)
 }
 
 /* Layout */
@@ -85,7 +86,7 @@ body {
 
 .game-timer {
   visibility: hidden;
-  color: rgb(147, 12, 12);
+  color: rgb(69,79,67);
 }
 
 .start-container {
