@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory card game</title>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,7 +16,7 @@
         <h1 class="heading">Memory meme game</h1>
         <div class="game-rules">
           <p class="paragraph" >Reveal and match pairs of cards to eliminate them from the game.
-            The goal is to uncover all cards within a 2-minute timeframe to secure a win.
+            The goal is to uncover all cards within a 90 seconds timeframe to secure a win.
           </p>
           <p class="paragraph">
             Winners earn a spot on the scoreboard, inviting friendly competition as players vie for the title of the fastest participant.
@@ -29,7 +33,7 @@
             Ready to play? Remember to input your name.
           </h2>
           <label for="nameInput">Enter your name:</label>
-          <input type="text" id="nameInput" required/>
+          <input type="text" id="nameInput" required autocomplete="off"/>
           <button type="submit" class="start-button" id="startButton">
             Start
           </button>

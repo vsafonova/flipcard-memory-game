@@ -14,7 +14,6 @@
 body {
   height: 100vh;
   font-family: 'Kavoon';
-  /* background: linear-gradient(270deg, rgba(228,235,235,1) 0%, rgba(77,76,74,1) 100%); */
   background-color: rgb(214,208,179)
 }
 
@@ -89,6 +88,13 @@ body {
   color: rgb(69,79,67);
 }
 
+.game-timer-low {
+  color: red;
+  animation: flash;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
 .start-container {
   position: absolute;
   width: 777px;
@@ -157,4 +163,14 @@ input {
 .end-screen-shown {
   visibility: visible;
   color: white;
+}
+
+
+@media all and (display-mode: fullscreen) {
+  .site-container {
+    padding-top: 5rem;
+  }
+  .start-container {
+    top:20%
+  }
 }

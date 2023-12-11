@@ -5,6 +5,8 @@ let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
 let endScreenEl = document.querySelector("#endScreen");
 
+let timerLow = new Audio("./sounds/TimeLow.mp3");
+
 let userName = "";
 
 let gameWon = false;
@@ -14,7 +16,7 @@ let correctGuesses = 0;
 let neededGuesses = 0;
 
 const maxTime = 90;
-const endTimeout = 5000;
+const endTimeout = 10000;
 let timer = maxTime;
 
 let cardsArray = [];
@@ -65,6 +67,7 @@ function compareCards(e) {
   }
 
   if (checkEqualCards(selectedCards[0], selectedCards[1])) {
+    playSuccessSound();
     winCondition();
     disablePointerEvents(selectedCards[0]);
     disablePointerEvents(selectedCards[1]);
@@ -75,6 +78,7 @@ function compareCards(e) {
       }
       toggleCard(selectedCards[0]);
       toggleCard(selectedCards[1]);
+      playUnFlipSound();
     }, 1000);
   }
 
@@ -89,6 +93,7 @@ function winCondition() {
     storePlayerData();
     endScreenEl.innerHTML = "You Win!";
     endScreenEl.classList.add("end-screen-shown");
+    playWinSound();
     setTimeout(resetGame, endTimeout);
   }
 }
@@ -101,6 +106,7 @@ function disablePointerEvents(card) {
 
 function selectCard(card) {
   card.classList.add("selected");
+  playFlipSound();
 }
 
 function unselectCard(card) {
@@ -127,6 +133,14 @@ function gameTimer() {
 
   let timerEl = document.querySelector("#gameTimer");
   timerEl.innerHTML = "Timer: " + timeConvert(timer);
+  if (timer > 12) {
+    timerEl.classList.remove("game-timer-low");
+  }
+  if (timer === 13) {
+    timerEl.classList.add("game-timer-low");
+    timerLow.play();
+  }
+
   if (timer <= 0) {
     endGame();
   }
@@ -140,6 +154,7 @@ function endGame() {
   }
   endScreenEl.innerHTML = "You Lose!";
   endScreenEl.classList.add("end-screen-shown");
+  playLoseSound();
   setTimeout(resetGame, endTimeout);
 }
 
@@ -176,11 +191,7 @@ function createScoreBoard() {
     let userScoreEl = document.createElement("div");
     userScoreEl.classList.add("score");
     userScoreEl.innerHTML =
-      i +
-      1 +
-      ". " +
-      scoreData[i].name + " " +
-      timeConvert(scoreData[i].time);
+      i + 1 + ". " + scoreData[i].name + " " + timeConvert(scoreData[i].time);
     scoreBoardEl.append(userScoreEl);
   }
 }
@@ -241,4 +252,31 @@ function createDeck() {
   //Funtion would be call immediately after api fetch
   cardsArray.sort(() => Math.random() - 0.5);
   cardsArray = cardsArray.slice(-10);
+}
+
+// Sounds effects
+function playFlipSound() {
+  let sound = new Audio("./sounds/Flip.mp3");
+  sound.play();
+}
+
+function playUnFlipSound() {
+  let sound = new Audio("./sounds/Unflip.mp3");
+  sound.play();
+}
+
+function playWinSound() {
+  timerLow.pause();
+  let sound = new Audio("./sounds/Win.mp3");
+  sound.play();
+}
+
+function playLoseSound() {
+  let sound = new Audio("./sounds/Lose.mp3");
+  sound.play();
+}
+
+function playSuccessSound() {
+  let sound = new Audio("./sounds/Success.mp3");
+  sound.play();
 }
