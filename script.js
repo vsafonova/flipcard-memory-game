@@ -204,7 +204,7 @@ function clearScoreBoard() {
 }
 
 async function getData() {
-  let apiUrl = "/api/meme.json";
+  let apiUrl = "./api/meme.json";
   try {
     let response = await fetch(apiUrl);
     let result = await response.json();
