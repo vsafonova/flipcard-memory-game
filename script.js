@@ -7,8 +7,6 @@ let endScreenEl = document.querySelector("#endScreen");
 let resetButtonEl = document.querySelector("#resetButton");
 
 let userName = "";
-
-let gameWon = false;
 let gameActive = false;
 
 let correctGuesses = 0;
@@ -93,8 +91,6 @@ function shuffleArray(array) {
   return array.toSorted(() => Math.random() - 0.5);
 }
 
-window.setInterval(gameTimer, 1000);
-
 function showTimer() {
   let timerEl = document.querySelector("#gameTimer");
   timerEl.style.visibility = "visible";
@@ -168,6 +164,8 @@ function addToggleCard(card) {
 function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
 }
+
+setInterval(gameTimer, 1000);
 
 //Logic for timer's working
 function gameTimer() {
