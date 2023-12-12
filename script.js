@@ -199,6 +199,7 @@ function timeConvert(timer) {
 }
 
 function endGame() {
+  gameActive = false;
   let cardEl = document.querySelectorAll(".card");
   for (let i = 0; i < cardEl.length; i++) {
     addToggleCard(cardEl[i]);
@@ -313,5 +314,6 @@ const sounds = [
 function stopSounds() {
   sounds.forEach((element) => {
     element.pause();
+    element.currentTime = 0;
   });
 }
