@@ -16,7 +16,7 @@
         <h1 class="heading">Memory meme game</h1>
         <div class="game-rules">
           <p class="paragraph" >Reveal and match pairs of cards to eliminate them from the game.
-            The goal is to uncover all cards within a 90 seconds timeframe to secure a win.
+            The goal is to uncover all cards within a 75 seconds timeframe to secure a win.
           </p>
           <p class="paragraph">
             Winners earn a spot on the scoreboard, inviting friendly competition as players vie for the title of the fastest participant.
@@ -34,7 +34,7 @@
           </h2>
           <label for="nameInput">Enter your name:</label>
           <input type="text" id="nameInput" required autocomplete="off"/>
-          <button type="submit" class="start-button" id="startButton">
+          <button type="submit" class="button" id="startButton">
             Start
           </button>
         </form>
@@ -46,6 +46,7 @@
           <h1 class="game-timer" id="gameTimer"></h1>
           <h2>Scoreboard</h2>
         </div>
+        <button class="button reset" id="resetButton">Reset the game </button>
       </div>
     </div>
     <script src="script.js"></script>

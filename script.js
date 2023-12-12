@@ -4,6 +4,7 @@ let nameInputEl = document.querySelector("#nameInput");
 let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
 let endScreenEl = document.querySelector("#endScreen");
+let resetButtonEl = document.querySelector("#resetButton")
 
 let userName = "";
 
@@ -13,15 +14,54 @@ let gameActive = false;
 let correctGuesses = 0;
 let neededGuesses = 0;
 
-const maxTime = 90;
+const maxTime = 75;
 const endTimeout = 10000;
 let timer = maxTime;
-let timerLow = new Audio("./sounds/TimeLow.mp3");
 
 let cardsArray = [];
 
 let scoreData = [];
 loadPlayerData();
+
+async function getData() {
+  let apiUrl = "./api/meme.json";
+  try {
+    let response = await fetch(apiUrl);
+    let result = await response.json();
+    cardsArray = result;
+    cardsArray = createDeck(cardsArray);
+    neededGuesses = cardsArray.length;
+    startGame();
+  } catch {
+    console.log("API error");
+  }
+}
+
+function createDeck(cards) {
+  //Funtion would be call immediately after api fetch
+  shuffleArray(cards);
+  cards = cards.slice(-10);
+  return cards
+}
+
+function startGame() {
+  gameActive = true;
+  correctGuesses = 0;
+  let shuffledCards = shuffleCards(cardsArray);
+  createCards(shuffledCards);
+  showTimer();
+}
+
+formEl.addEventListener("submit", function (e) {
+  e.preventDefault();
+  userName = nameInputEl.value;
+  getData().then(() => {
+    startContainerEl.classList.add("start-container-hidden");
+    nameInputEl.value = "";
+    resetButtonEl.style.visibility = "visible"
+  })
+  
+});
 
 //Card generator Function
 function createCards(cards) {
@@ -54,6 +94,17 @@ function shuffleCards(cards) {
   return cards;
 }
 
+function shuffleArray(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+window.setInterval(gameTimer, 1000);
+
+function showTimer() {
+  let timerEl = document.querySelector("#gameTimer");
+  timerEl.style.visibility = "visible";
+}
+
 //Check cards
 function compareCards(e) {
   let clickedCard = e.target;
@@ -67,7 +118,7 @@ function compareCards(e) {
   }
 
   if (checkEqualCards(selectedCards[0], selectedCards[1])) {
-    playSuccessSound();
+    playMatchSound();
     winCondition();
     disablePointerEvents(selectedCards[0]);
     disablePointerEvents(selectedCards[1]);
@@ -98,7 +149,6 @@ function winCondition() {
   }
 }
 
-window.setInterval(gameTimer, 1000);
 
 function disablePointerEvents(card) {
   card.style.pointerEvents = "none";
@@ -125,6 +175,7 @@ function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
 }
 
+//Logic for timer's working 
 function gameTimer() {
   if (gameActive === false) {
     return;
@@ -146,6 +197,15 @@ function gameTimer() {
   }
 }
 
+function timeConvert(timer) {
+  let minutes = Math.floor(timer / 60);
+  let seconds = timer - minutes * 60;
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  return minutes + ":" + seconds;
+}
+
 function endGame() {
   gameActive = false;
   let cardEl = document.querySelectorAll(".card");
@@ -156,15 +216,6 @@ function endGame() {
   endScreenEl.classList.add("end-screen-shown");
   playLoseSound();
   setTimeout(resetGame, endTimeout);
-}
-
-function timeConvert(timer) {
-  let minutes = Math.floor(timer / 60);
-  let seconds = timer - minutes * 60;
-  if (seconds < 10) {
-    seconds = "0" + seconds;
-  }
-  return minutes + ":" + seconds;
 }
 
 function storePlayerData() {
@@ -211,23 +262,10 @@ function clearScoreBoard() {
   }
 }
 
-async function getData() {
-  let apiUrl = "./api/meme.json";
-  try {
-    let response = await fetch(apiUrl);
-    let result = await response.json();
-    cardsArray = result;
-    cardsArray = createDeck(cardsArray);
-    neededGuesses = cardsArray.length;
-    startGame();
-  } catch {
-    console.log("API error");
-  }
-}
-
 function resetGame() {
+  stopSounds()
+  gameActive = false;
   endScreenEl.classList.remove("end-screen-shown");
-
   let timerEl = document.querySelector("#gameTimer");
   timerEl.style.visibility = "hidden";
   let card = document.querySelectorAll(".card");
@@ -238,61 +276,44 @@ function resetGame() {
   startContainerEl.classList.remove("start-container-hidden");
 }
 
-function startGame() {
-  gameActive = true;
-  correctGuesses = 0;
-  let shuffledCards = shuffleCards(cardsArray);
-  createCards(shuffledCards);
-  showTimer();
-}
-
-formEl.addEventListener("submit", function (e) {
-  e.preventDefault();
-  userName = nameInputEl.value;
-  getData().then(() => {
-    startContainerEl.classList.add("start-container-hidden");
-  })
-});
-
-function showTimer() {
-  let timerEl = document.querySelector("#gameTimer");
-  timerEl.style.visibility = "visible";
-}
-
-function createDeck(cards) {
-  //Funtion would be call immediately after api fetch
-  shuffleArray(cards);
-  cards = cards.slice(-10);
-  return cards
-}
+resetButtonEl.addEventListener('click', function(){
+  resetGame();
+  resetButtonEl.style.visibility = "hidden";
+})
 
 // Sounds effects
 function playFlipSound() {
-  let sound = new Audio("./sounds/Flip.mp3");
-  sound.play();
+  flipSound.play();
 }
 
 function playUnFlipSound() {
-  let sound = new Audio("./sounds/Unflip.mp3");
-  sound.play();
+  unflipSound.play();
 }
 
 function playWinSound() {
   timerLow.pause();
-  let sound = new Audio("./sounds/Win.mp3");
-  sound.play();
+  winSound.play();
 }
 
 function playLoseSound() {
-  let sound = new Audio("./sounds/Lose.mp3");
-  sound.play();
+  loseSound.play();
 }
 
-function playSuccessSound() {
-  let sound = new Audio("./sounds/Success.mp3");
-  sound.play();
+function playMatchSound() {
+  matchSound.play();
 }
 
-function shuffleArray(array) {
-  array.sort(() => Math.random() - 0.5);
+const matchSound = new Audio("./sounds/Match.mp3");
+const loseSound = new Audio("./sounds/Lose.mp3");
+const winSound = new Audio("./sounds/Win.mp3");
+const unflipSound = new Audio("./sounds/Unflip.mp3");
+const flipSound = new Audio("./sounds/Flip.mp3");
+const timerLow = new Audio("./sounds/TimeLow.mp3");
+
+const sounds = [matchSound, loseSound, winSound, unflipSound, flipSound, timerLow];
+
+function stopSounds() {
+  sounds.forEach(element => {
+    element.pause()
+  });
 }

@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Kavoon';
+  font-family: "Kavoon";
   src: url(./fonts/Kavoon-Regular.ttf);
 }
 
@@ -13,8 +13,8 @@
 /* Global */
 body {
   height: 100vh;
-  font-family: 'Kavoon';
-  background-color: rgb(214,208,179)
+  font-family: "Kavoon";
+  background-color: rgb(214, 208, 179);
 }
 
 /* Layout */
@@ -33,7 +33,7 @@ body {
 }
 
 .score-board {
-  width: 300px;
+  width: 200px;
 }
 
 .start-container {
@@ -76,6 +76,7 @@ body {
   background-image: url("images/loadingCat.webp");
   background-size: cover;
   backface-visibility: hidden;
+  border: 4px white solid;
 }
 
 .toggleCard {
@@ -85,7 +86,7 @@ body {
 
 .game-timer {
   visibility: hidden;
-  color: rgb(69,79,67);
+  color: rgb(69, 79, 67);
 }
 
 .game-timer-low {
@@ -102,7 +103,7 @@ body {
   background-image: url("./images/meme-background.jpg");
   background-size: cover;
   z-index: 1;
-  left: 10.5%;
+  left: 5.5%;
   top: 15%;
   color: white;
 }
@@ -118,7 +119,7 @@ body {
 }
 
 .paragraph {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: 400;
 }
 
@@ -135,27 +136,35 @@ body {
 input {
   height: 35px;
   border-radius: 10px;
-  font-family: 'Kavoon';
+  font-family: "Kavoon";
   padding: 1rem;
 }
 
-.start-button {
+.button {
   height: 35px;
   width: 150px;
   border-radius: 10px;
-  font-family: 'Kavoon';
+  font-family: "Kavoon";
   border: 2px black solid;
 }
 
-.start-button:hover {
+.button:hover {
   background-color: #9ca47f;
+}
+
+.button.reset {
+  height: 60px;
+  width: 250px;
+  font-size: 2rem;
+  align-self: center;
+  visibility: hidden;
 }
 
 .end-screen {
   position: absolute;
   visibility: hidden;
   font-size: 5rem;
-  left: 25%;
+  left: 18%;
   top: 42%;
   z-index: 2;
 }
@@ -165,12 +174,11 @@ input {
   color: white;
 }
 
-
 @media all and (display-mode: fullscreen) {
   .site-container {
     padding-top: 5rem;
   }
   .start-container {
-    top:20%
+    top: 20%;
   }
 }
