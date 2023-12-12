@@ -22,11 +22,11 @@ let scoreData = [];
 loadPlayerData();
 
 async function startGame() {
-  let cardsArray = await fetchData();
-  const deck = createDeck(cardsArray);
+  let imagesArray = await fetchData();
+  const deck = createDeck(imagesArray);
   neededGuesses = deck.length;
   let shuffledCards = shuffleCards(deck);
-  createCards(shuffledCards);
+  displayCards(shuffledCards);
   gameActive = true;
   correctGuesses = 0;
   showTimer();
@@ -46,9 +46,8 @@ async function fetchData() {
 
 function createDeck(cards) {
   //Funtion would be call immediately after api fetch
-  shuffleArray(cards);
-  cards = cards.slice(-10);
-  return cards;
+  const shuffledCards = shuffleArray(cards);
+  return shuffledCards.slice(-10);
 }
 
 formEl.addEventListener("submit", function (e) {
@@ -61,8 +60,7 @@ formEl.addEventListener("submit", function (e) {
   });
 });
 
-//Card generator Function
-function createCards(cards) {
+function displayCards(cards) {
   //Generate the HTML
   for (let i = 0; i < cards.length; i++) {
     let card = document.createElement("div");
@@ -86,14 +84,13 @@ function createCards(cards) {
   }
 }
 
-function shuffleCards(cards) {
-  cards = cards.concat(cards);
-  shuffleArray(cards);
-  return cards;
+function shuffleCards(deck) {
+  const cards = deck.concat(deck);
+  return shuffleArray(cards);
 }
 
 function shuffleArray(array) {
-  array.sort(() => Math.random() - 0.5);
+  return array.toSorted(() => Math.random() - 0.5);
 }
 
 window.setInterval(gameTimer, 1000);
