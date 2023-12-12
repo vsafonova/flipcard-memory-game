@@ -4,7 +4,7 @@ let nameInputEl = document.querySelector("#nameInput");
 let startButtonEl = document.querySelector("#startButton");
 let formEl = document.querySelector("#form");
 let endScreenEl = document.querySelector("#endScreen");
-let resetButtonEl = document.querySelector("#resetButton")
+let resetButtonEl = document.querySelector("#resetButton");
 
 let userName = "";
 
@@ -18,20 +18,27 @@ const maxTime = 75;
 const endTimeout = 10000;
 let timer = maxTime;
 
-let cardsArray = [];
-
 let scoreData = [];
 loadPlayerData();
 
-async function getData() {
+async function startGame() {
+  let cardsArray = await fetchData();
+  const deck = createDeck(cardsArray);
+  neededGuesses = deck.length;
+  let shuffledCards = shuffleCards(deck);
+  createCards(shuffledCards);
+  gameActive = true;
+  correctGuesses = 0;
+  showTimer();
+}
+
+async function fetchData() {
   let apiUrl = "./api/meme.json";
   try {
     let response = await fetch(apiUrl);
     let result = await response.json();
-    cardsArray = result;
-    cardsArray = createDeck(cardsArray);
-    neededGuesses = cardsArray.length;
-    startGame();
+
+    return result;
   } catch {
     console.log("API error");
   }
@@ -41,26 +48,17 @@ function createDeck(cards) {
   //Funtion would be call immediately after api fetch
   shuffleArray(cards);
   cards = cards.slice(-10);
-  return cards
-}
-
-function startGame() {
-  gameActive = true;
-  correctGuesses = 0;
-  let shuffledCards = shuffleCards(cardsArray);
-  createCards(shuffledCards);
-  showTimer();
+  return cards;
 }
 
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
   userName = nameInputEl.value;
-  getData().then(() => {
+  startGame().then(() => {
     startContainerEl.classList.add("start-container-hidden");
     nameInputEl.value = "";
-    resetButtonEl.style.visibility = "visible"
-  })
-  
+    resetButtonEl.style.visibility = "visible";
+  });
 });
 
 //Card generator Function
@@ -149,7 +147,6 @@ function winCondition() {
   }
 }
 
-
 function disablePointerEvents(card) {
   card.style.pointerEvents = "none";
 }
@@ -175,7 +172,7 @@ function checkEqualCards(card1, card2) {
   return card1.getAttribute("name") === card2.getAttribute("name");
 }
 
-//Logic for timer's working 
+//Logic for timer's working
 function gameTimer() {
   if (!gameActive) {
     return;
@@ -262,7 +259,7 @@ function clearScoreBoard() {
 }
 
 function resetGame() {
-  stopSounds()
+  stopSounds();
   gameActive = false;
   endScreenEl.classList.remove("end-screen-shown");
   let timerEl = document.querySelector("#gameTimer");
@@ -275,10 +272,10 @@ function resetGame() {
   startContainerEl.classList.remove("start-container-hidden");
 }
 
-resetButtonEl.addEventListener('click', function(){
+resetButtonEl.addEventListener("click", function () {
   resetGame();
   resetButtonEl.style.visibility = "hidden";
-})
+});
 
 // Sounds effects
 function playFlipSound() {
@@ -309,10 +306,17 @@ const unflipSound = new Audio("./sounds/Unflip.mp3");
 const flipSound = new Audio("./sounds/Flip.mp3");
 const timerLow = new Audio("./sounds/TimeLow.mp3");
 
-const sounds = [matchSound, loseSound, winSound, unflipSound, flipSound, timerLow];
+const sounds = [
+  matchSound,
+  loseSound,
+  winSound,
+  unflipSound,
+  flipSound,
+  timerLow,
+];
 
 function stopSounds() {
-  sounds.forEach(element => {
-    element.pause()
+  sounds.forEach((element) => {
+    element.pause();
   });
 }
