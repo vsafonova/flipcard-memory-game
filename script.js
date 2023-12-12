@@ -124,7 +124,7 @@ function compareCards(e) {
     disablePointerEvents(selectedCards[1]);
   } else {
     setTimeout(function () {
-      if (gameActive === false) {
+      if (!gameActive) {
         return;
       }
       toggleCard(selectedCards[0]);
@@ -177,7 +177,7 @@ function checkEqualCards(card1, card2) {
 
 //Logic for timer's working 
 function gameTimer() {
-  if (gameActive === false) {
+  if (!gameActive) {
     return;
   }
   timer -= 1;
@@ -207,7 +207,6 @@ function timeConvert(timer) {
 }
 
 function endGame() {
-  gameActive = false;
   let cardEl = document.querySelectorAll(".card");
   for (let i = 0; i < cardEl.length; i++) {
     addToggleCard(cardEl[i]);
