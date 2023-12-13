@@ -48,6 +48,15 @@ function createDeck(cards) {
   return shuffledCards.slice(-10);
 }
 
+function shuffleCards(deck) {
+  const cards = deck.concat(deck);
+  return shuffleArray(cards);
+}
+
+function shuffleArray(array) {
+  return array.toSorted(() => Math.random() - 0.5);
+}
+
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
   userName = nameInputEl.value;
@@ -80,15 +89,6 @@ function displayCards(cards) {
       compareCards(e);
     });
   }
-}
-
-function shuffleCards(deck) {
-  const cards = deck.concat(deck);
-  return shuffleArray(cards);
-}
-
-function shuffleArray(array) {
-  return array.toSorted(() => Math.random() - 0.5);
 }
 
 function showTimer() {
