@@ -1,11 +1,3 @@
-let gameContainerEl = document.querySelector("#gameContainer");
-let startContainerEl = document.querySelector("#startContainer");
-let nameInputEl = document.querySelector("#nameInput");
-let startButtonEl = document.querySelector("#startButton");
-let formEl = document.querySelector("#form");
-let endScreenEl = document.querySelector("#endScreen");
-let resetButtonEl = document.querySelector("#resetButton");
-
 let userName = "";
 let gameActive = false;
 
@@ -57,6 +49,10 @@ function shuffleArray(array) {
   return array.toSorted(() => Math.random() - 0.5);
 }
 
+let formEl = document.querySelector("#form");
+let nameInputEl = document.querySelector("#nameInput");
+let startContainerEl = document.querySelector("#startContainer");
+
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
   userName = nameInputEl.value;
@@ -66,6 +62,8 @@ formEl.addEventListener("submit", function (e) {
     resetButtonEl.style.visibility = "visible";
   });
 });
+
+let gameContainerEl = document.querySelector("#gameContainer");
 
 function displayCards(cards) {
   //Generate the HTML
@@ -198,6 +196,8 @@ function timeConvert(timer) {
   return minutes + ":" + seconds;
 }
 
+let endScreenEl = document.querySelector("#endScreen");
+
 function endGame() {
   gameActive = false;
   let cardEl = document.querySelectorAll(".card");
@@ -267,6 +267,8 @@ function resetGame() {
   timer = maxTime;
   startContainerEl.classList.remove("start-container-hidden");
 }
+
+let resetButtonEl = document.querySelector("#resetButton");
 
 resetButtonEl.addEventListener("click", function () {
   resetGame();
