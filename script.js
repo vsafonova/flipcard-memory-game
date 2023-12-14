@@ -254,12 +254,15 @@ function clearScoreBoard() {
   }
 }
 
+let resetButtonEl = document.querySelector("#resetButton");
+
 function resetGame() {
   stopSounds();
   gameActive = false;
   endScreenEl.classList.remove("end-screen-shown");
   let timerEl = document.querySelector("#gameTimer");
   timerEl.style.visibility = "hidden";
+  resetButtonEl.style.visibility = "hidden";
   let card = document.querySelectorAll(".card");
   for (let i = 0; i < card.length; i++) {
     card[i].remove();
@@ -268,11 +271,8 @@ function resetGame() {
   startContainerEl.classList.remove("start-container-hidden");
 }
 
-let resetButtonEl = document.querySelector("#resetButton");
-
 resetButtonEl.addEventListener("click", function () {
   resetGame();
-  resetButtonEl.style.visibility = "hidden";
 });
 
 // Sounds effects
