@@ -17,7 +17,7 @@ Create a dynamic and interactive web page using JavaScript, including DOM manipu
 </ul>
 
 ## Tools and stack:
-HTML / CSS / Vanilla JavaScript
+HTML / CSS / Vanilla JavaScript / API
 
 ## Project links:
 ### Website: [Visit the website](https://vsafonova.github.io/memory-card-game/)
