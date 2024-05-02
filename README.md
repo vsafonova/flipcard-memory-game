@@ -5,7 +5,7 @@ Uncover two matching cards at once to eliminate them from the game. Eliminate al
 ***The project was made while studying a module dedicated to JavaScript and therefore needs a complete rewrite in React and also needs to change styles for accessibility on different devices.***
 
 ## The project brief dedicated to the JavaScript module
-Create a dynamic and interactive web page using JavaScript, including DOM manipulation, event handling, asynchronous data fetching, and data storage.
+Design and develop a React application with dynamic, interactive user interfaces, and demonstrate an understanding of component state and props, including using hooks to control component behavior and fetching data from APIs.
 
 ## Project criteria
 <ul>
